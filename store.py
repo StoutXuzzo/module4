@@ -53,12 +53,33 @@ def getFullStock():
     msj = "Current store status\n==========================\n[Code - Units - Price]"
     for k in stock.keys():
         msj += "\n[" + str(k) + " - " + str(getQuantyProduct(k)) + " - " + str(getPriceProduct(k)) + "]"
-    msj += "\nCash: " + str(cash)
+    msj += "\nCash: " + str(round(cash,2))
     return msj
 
 def menu():
-    msj = "1.- Show full store detail\n2.- Sales\n3.- Replace\n4.- Change price of product\n5.- Exit\nSelect option: "
+    msj = "1.- Show full store detail\n2.- Sales\n3.- Replace\n4.- Change price of product\n5.- Add new product\n6.- Delete a product\n7.- Exit\nSelect option: "
     return msj
+
+def addNewProuct(code, price):
+    if not code in stock:
+        stock.update({code:{"price":price, "quant":0}})
+        return True
+    else:
+         False
+
+def deleteProduct(code):
+    if code in stock:
+        del stock[code]
+        return True
+    else:
+        return False
+
+def validateFloat(price):
+    try:
+        float(price)
+        return True
+    except:
+        return False
 
 while True:
     user = input(menu())
@@ -97,8 +118,8 @@ while True:
         code = input("Enter product code: ")
         while True:
             price = input("New price for product: ")
-            if price.isdigit():
-                price = float(quant)
+            if validateFloat(price):
+                price = float(price)
                 break
             else:
                 print("This has to be a number!!")
@@ -107,6 +128,28 @@ while True:
         print("Updated price!")
 
     elif user == "5":
+        code = input("Enter product code: ")
+        while True:
+            price = input("Price for the product: ")
+            if validateFloat(price):
+                price = float(price)
+                break
+            else:
+                print("This has to be a number!!")
+        
+        if addNewProuct(code, price):
+            print("The product has been added!")
+        else:
+            print("Product not valid")
+
+    elif user == "6":
+        code = input("Enter product code: ")
+        if deleteProduct(code):
+            print("The product has been deleted!")
+        else:
+            print("The product can not be deleted.")
+
+    elif user == "7":
         print("Have a nice day!")
         break
 
